@@ -1,4 +1,4 @@
-body{
+*{
     padding: 0;
     margin: 0;
 }
@@ -6,17 +6,34 @@ body{
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
     height: 100vh;
+    background-color: #2d2c50;  
+}
+.container a{
+    text-decoration: none;
 }
 .container h1{
-    
+    font-family: 'Bungee inline';
+    color: #2fc29b;
+    font-size: 36px;
+}
+.container-gameboard{
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    width: 60%;
 }
 .gameboard{
     border-radius: 50%;
     overflow: hidden;
-    height: 70%;
-    width: calc(100vh * 70/100);
+    width: 95%;
+    height: calc(60vw * 95/100);
     position: relative;
+    border: 5px solid white;
+    box-sizing: border-box;
 }
 .color{
     cursor: pointer;
@@ -62,19 +79,20 @@ body{
 
 .button {
     cursor: pointer;
-    width: 420px;
-    height: 100px;
+    width: 80%;
     background: #ecf0f1;
     color: #462c50;
     border: none;
     border-bottom: 4px solid #c4c6c7;
     border-radius: 8px;
-    font-size: 3em;
+    font-size: 5vw;
     position: absolute;
-    top: calc(50% - 50px);
-    left: calc(50% - 210px);
-    transition: .5s;
     outline: none;
+    top: 40%;
+    left: 0;
+    right: 0;
+    bottom: 40%;
+    margin: auto;
   }
 
   .button:hover {
@@ -86,4 +104,19 @@ body{
   .button:active{
     transform: scale(0.95);
     transition-duration: 0.2s;
+  }
+
+  @media screen and (max-width: 720px){
+    .container-gameboard{
+        margin: 0 auto;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 80%;
+        height: calc(100vw * 80/100);
+    }
+    .gameboard{
+        width: 100%;
+        height: 100%;
+    }
   }

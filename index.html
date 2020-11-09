@@ -4,24 +4,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="estilos.css">
+    <link rel="stylesheet" href="./styles.css">
     <link href="https://fonts.googleapis.com/css?family=Bungee+Inline|Quicksand" rel="stylesheet">
     <title>Juego Simon Dice</title>
 </head>
 <body>
     <div class="container">
-        <a href="index.html">
-            <h1>Simon dice</h1>
-        </a>
+        <h1 class="game-title">Simon dice</h1>
         <div class="container-gameboard">
             <div class="gameboard">
-                <div id="yellow" class="color yellow" data-color="yellow"></div>
-                <div id="blue" class="color blue" data-color="blue"></div>
-                <div id="green" class="color green" data-color="green"></div>
-                <div id="red" class="color red" data-color="red"></div>
-                <button id="btnIniciar" class="button" onclick="empezarJuego()">Iniciar</button>
+                <div class="content">
+                    <div id="yellowButton" class="color yellow" data-color="yellow"></div>
+                    <div id="blueButton" class="color blue" data-color="blue"></div>
+                    <div id="greenButton" class="color green" data-color="green"></div>
+                    <div id="redButton" class="color red" data-color="red"></div>
+                    <button id="startButton" class="button" onclick="startGame()">Iniciar</button>
+                </div>
             </div>
         </div>
+        <span class="game-level" id="gameLevel">Level:</span>
     </div>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script src="juego.js"></script>

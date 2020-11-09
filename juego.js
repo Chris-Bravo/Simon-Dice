@@ -1,131 +1,202 @@
-const btnIniciar = document.getElementById("btnIniciar")
-const yellow = document.getElementById("yellow")
-const blue = document.getElementById("blue")
-const green = document.getElementById("green")
-const red = document.getElementById("red")
-const ultimoNivel = 10
+const startButton = document.getElementById('startButton');
+const yellowButton = document.getElementById('yellowButton');
+const blueButton = document.getElementById('blueButton');
+const greenButton = document.getElementById('greenButton');
+const redButton = document.getElementById('redButton');
+const gameLevel = document.getElementById('gameLevel');
 
-class Juego{
-    constructor(){
-        this.iniciar()
-        this.generarSecuencia()
-        setTimeout(this.siguienteNivel,500)
+const FINAL_LEVEL = 4;
+const COLORS =  {
+    'yellow': 0,
+    'blue': 1,
+    'green': 2,|
+    'red': 3
+}
+
+const GAME_BUTTONS_BY_COLOR = {
+    yellow: yellowButton,
+    blue: blueButton,
+    green: greenButton,
+    red: redButton
+};
+
+class SimonSays {
+    
+    constructor () {
+        this.addClickListenerToButtons = this.addClickListenerToButtons.bind(this);
+        this.onColorButtonClick = this.onColorButtonClick.bind(this);
+        this.turnOffButtonByColor = this.turnOffButtonByColor.bind(this);
+        this.turnOnButtonByColor = this.turnOnButtonByColor.bind(this);
+        this.restartGameState = this.restartGameState.bind(this);
+        this.nextLevel = this.nextLevel.bind(this);
+
+        this.initGame();
     }
-    iniciar(){
-        this.toggleBtnEmpezar()
-        this.nivel = 1
-        this.colores = {
-            yellow,
-            blue,
-            green,
-            red
-        }
-        this.elegirColor = this.elegirColor.bind(this)
-        this.siguienteNivel = this.siguienteNivel.bind(this)
-        this.iniciar = this.iniciar.bind(this)
+    
+    initGame () {
+        this.currentLevel = 1;
+        this.updateDOM();
+        this.generateNewSequence();
+        this.hideStartButton();
+
+        setTimeout(this.nextLevel, 1000);
     }
-    toggleBtnEmpezar(){
-        if(btnIniciar.classList.contains("hide")){
-            btnIniciar.classList.remove("hide")
-        }else{
-            btnIniciar.classList.add("hide")
-        }
-    }
-    generarSecuencia(){
-        this.secuencia = new Array(ultimoNivel).fill(0).map(n => Math.floor(Math.random() * 4))
-    }
-    siguienteNivel(){
-        this.subnivel = 0
-        this.iluminarSecuencia()
-        this.agregarEventosClick()
-    }
-    transformarNumeroColor(numero){
-        switch(numero){
-            case 0:
-                return "yellow"
-            case 1:
-                return "blue"
-            case 2:
-                return "green"
-            case 3:
-                return "red"
-        }
-    }
-    transformarColorNumero(color){
-        switch(color){
-            case "yellow":
-                return 0
-            case "blue":
-                return 1
-            case "green":
-                return 2
-            case "red":
-                return 3
-        }
-    }
-    iluminarSecuencia(){
-        for (let i = 0; i < this.nivel; i++){
-            const color = this.transformarNumeroColor(this.secuencia[i])
-            setTimeout(() => this.iluminarColor(color), 1000 * i)
-        }
-    }
-    iluminarColor(color){
-        this.colores[color].classList.add("light","animations")
-        setTimeout(() => this.apagarColor(color), 350)
+    
+    generateNewSequence () {
+        this.colorSequenceInGame = new Array(FINAL_LEVEL).fill(0).map(_ => Math.floor(Math.random() * 4));
     }
 
-    apagarColor(color){
-        this.colores[color].classList.remove("light","animations")
+    hideStartButton () {
+        startButton.classList.add('hide');
     }
-    agregarEventosClick(){
-        this.colores.yellow.addEventListener("click", this.elegirColor)
-        this.colores.blue.addEventListener("click", this.elegirColor)
-        this.colores.green.addEventListener("click", this.elegirColor)
-        this.colores.red.addEventListener("click", this.elegirColor)
+
+    displayStartButton () {
+        startButton.classList.remove('hide');
     }
-    eliminarEventosClick(){
-        this.colores.yellow.removeEventListener("click", this.elegirColor)
-        this.colores.blue.removeEventListener("click", this.elegirColor)
-        this.colores.green.removeEventListener("click", this.elegirColor)
-        this.colores.red.removeEventListener("click", this.elegirColor)
+
+    getColorByNumber (number) {
+        const color = Object.keys(COLORS).filter(color => COLORS[color] === number);
+
+        return color[0];
     }
-    elegirColor(ev){
-        const nombreColor = ev.target.dataset.color
-        const numeroColor = this.transformarColorNumero(nombreColor)
-        this.iluminarColor(nombreColor)
-        if (numeroColor === this.secuencia[this.subnivel]){
-            this.subnivel++
-            if(this.subnivel === this.nivel){
-                this.nivel++
-                this.eliminarEventosClick()
-                if(this.nivel === (ultimoNivel + 1)){
-                    this.ganoElJuego()
-                }else{
-                    swal("Muy bien",{
-                        icon: "success",
-                        buttons: false,
-                        timer: 800
-                    })
-                    setTimeout(this.siguienteNivel, 1500)
+
+    getNumberByColor (color) {
+        return COLORS[color];
+    }
+
+    updateDOM () {
+        gameLevel.innerText = this.currentLevel;
+    }
+
+    iluminateSequence () {
+        for (let i = 0; i < this.currentLevel; i++) {
+            const color = this.getColorByNumber(this.colorSequenceInGame[i]);
+            const delay = 1000 * i;
+
+            setTimeout(this.turnOnButtonByColor, delay, color);
+
+            // Enable buttons after the last button turned on
+            if (i === this.currentLevel - 1) {
+                setTimeout(this.addClickListenerToButtons, delay);
+            }
+        }
+
+    }
+
+    turnOnButtonByColor (color, duration = 300) {
+        const button = GAME_BUTTONS_BY_COLOR[color];
+        button.classList.add('light','animations');
+
+        setTimeout(this.turnOffButtonByColor, duration, color);
+    }
+
+    turnOffButtonByColor (color) {
+        const button = GAME_BUTTONS_BY_COLOR[color];
+        button.classList.remove('light','animations');
+    }
+
+    addClickListenerToButtons () {
+        Object.values(GAME_BUTTONS_BY_COLOR).forEach(button => button.addEventListener('click', this.onColorButtonClick));
+    }
+
+    removeClickListenerToButtons () {
+        Object.values(GAME_BUTTONS_BY_COLOR).forEach(button => button.removeEventListener('click', this.onColorButtonClick));
+    }
+
+    onColorButtonClick ($event) {
+        const { color } = $event.target.dataset;
+        const colorNumber = this.getNumberByColor(color);
+
+        this.turnOnButtonByColor(color, 200);
+
+        if (colorNumber === this.colorSequenceInGame[this.sublevel]) {
+            this.sublevel++;
+
+            if (this.sublevel === this.currentLevel) {
+                this.currentLevel++;
+
+                if (this.currentLevel === FINAL_LEVEL) {
+                    this.winner();
+                } else {
+                    this.passToNextLevel();
                 }
             }
-        }else{
-            this.perdioElJuego()
+        } else {
+            this.gameOver();
         }
     }
-    ganoElJuego(){
-        swal("Ganaste!","Felicitaciones, ganaste el juego!","success")
-            .then(this.iniciar)
+
+    passToNextLevel () {
+        swal('Muy bien',{
+            icon: 'success',
+            buttons: false,
+            timer: 800
+        });
+        this.updateDOM();
+        setTimeout(this.nextLevel, 1500);
     }
-    perdioElJuego(){
-        swal("Perdiste!","Lo lamentamos, perdiste :(","error")
-            .then(() => {
-                this.eliminarEventosClick()
-                this.iniciar()
-            })
+
+    nextLevel () {
+        this.sublevel = 0;
+        this.removeClickListenerToButtons();
+        this.iluminateSequence();
+    }
+
+    winner () {
+        swal('Ganaste!','Felicitaciones, ganaste el juego!','success').then(this.restartGameState);
+    }
+    
+    gameOver () {
+        swal('Perdiste!','Lo lamentamos, perdiste :(','error').then(this.restartGameState);
+    }
+
+    restartGameState () {
+        this.displayStartButton();
+        this.removeClickListenerToButtons();
     }
 }
 
-function empezarJuego(){
-    window.juego = new Juego()
+function startGame () {
+    if (window.juego) {
+        window.juego.initGame();
+    } else {
+        window.juego = new SimonSays();
+    }
 }
+
+// function factoryUseState() {
+//     let state;
+
+//     function setState(callback) {
+//         state = callback(state) || state;
+//     }
+
+//     function getState() {
+//         return state;
+//     }
+
+//     return (initialState) => {
+//         state = initialState;
+
+//         return [getState, setState];
+//     }
+// }
+
+// const useState = factoryUseState();
+// const [getState, setState] = useState({ level: 0, sublevel: 0 });
+
+// console.log(getState())
+
+// setState((state) => {
+//     console.log(state);
+// });
+
+// console.log(getState());
+
+// setState((state) => ({
+//     newValue: 0,
+//     level: 1,
+//     sublevel: state.sublevel++,
+// }));
+
+// console.log(getState());

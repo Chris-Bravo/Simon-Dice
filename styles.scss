@@ -2,6 +2,9 @@ $yellow: #ffd166;
 $blue: #3da5d9;
 $green: #06d6a0;
 $red: #ef476f;
+$purple: #2d2c50;
+$white: #f1f1f1;
+$gray: #d6d6d6;
 
 * {
   box-sizing: border-box;
@@ -13,6 +16,7 @@ body {
   font-family: 'Bungee inline';
 }
 
+// TODO: Change to use BEM for class naming
 .game {
   position: relative;
   display: flex;
@@ -20,7 +24,7 @@ body {
   align-items: center;
   justify-content: space-between;
   height: 100vh;
-  background-color: #2d2c50;
+  background-color: $purple;
 }
 
 .game-header {
@@ -28,14 +32,16 @@ body {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   padding: 8px;
+  user-select: none;
 }
 
 .game-footer {
   padding: 8px;
+  user-select: none;
 }
 
 .game-score {
-  color: #ffffff;
+  color: $white;
   font-size: 22px;
   display: flex;
   flex-direction: column;
@@ -50,7 +56,7 @@ body {
 
 .game-title {
   display: flex;
-  color: #2fc29b;
+  color: $green;
   justify-content: center;
   font-size: 36px;
 }
@@ -64,7 +70,7 @@ body {
 }
 
 .game-level {
-  color: #ffffff;
+  color: $white;
   font-size: 32px;
 }
 
@@ -74,7 +80,8 @@ body {
   justify-content: center;
   align-items: center;
   position: relative;
-  width: 60%;
+  width: 100%;
+  padding: 0 16px;
 }
 
 .simon-board {
@@ -155,28 +162,63 @@ $button-colors: (
 .button {
   cursor: pointer;
   width: 80%;
-  background: #ecf0f1;
-  color: #462c50;
+  background-color: $white;
+  padding: 8px;
+  color: $red;
   border: none;
-  border-bottom: 4px solid #c4c6c7;
+  border-bottom: 4px solid $gray;
   border-radius: 8px;
   font-size: 60px;
   position: absolute;
   outline: none;
-  top: 40%;
-  left: 0;
-  right: 0;
-  bottom: 40%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   margin: auto;
+  transition-property: color, background-color, border-bottom, transform;
+  transition-duration: 150ms;
 
   &:hover {
-    color: #ecf0f1;
-    background: #462c50;
-    border-bottom: 4px solid #411f4e;
+    color: $white;
+    background-color: $red;
+    border-bottom: 4px solid darken($red, 20);
   }
 
   &:active {
-    transform: scale(0.95);
-    transition-duration: 0.2s;
+    transform: translate(-50%, -50%) scale(0.95);
+  }
+}
+
+@media screen and (max-width: 540px) {
+  .game-header-offset {
+    display: none;
+  }
+
+  .game-header {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .game-title {
+    justify-content: flex-start;
+  }
+
+  .button {
+    font-size: 40px;
+  }
+
+  .yellow {
+    border-radius: 100% 5px 0 5px;
+  }
+  
+  .blue {
+    border-radius: 5px 100% 5px 0;
+  }
+  
+  .green {
+    border-radius: 0 5px 100% 5px;
+  }
+  
+  .red {
+    border-radius: 5px 0 5px 100%;
   }
 }

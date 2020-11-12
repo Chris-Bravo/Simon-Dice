@@ -23,14 +23,16 @@ body {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   padding: 8px;
+  user-select: none;
 }
 
 .game-footer {
   padding: 8px;
+  user-select: none;
 }
 
 .game-score {
-  color: #ffffff;
+  color: #f1f1f1;
   font-size: 22px;
   display: flex;
   flex-direction: column;
@@ -44,7 +46,7 @@ body {
 
 .game-title {
   display: flex;
-  color: #2fc29b;
+  color: #06d6a0;
   justify-content: center;
   font-size: 36px;
 }
@@ -58,7 +60,7 @@ body {
 }
 
 .game-level {
-  color: #ffffff;
+  color: #f1f1f1;
   font-size: 32px;
 }
 
@@ -68,7 +70,8 @@ body {
   justify-content: center;
   align-items: center;
   position: relative;
-  width: 60%;
+  width: 100%;
+  padding: 0 16px;
 }
 
 .simon-board {
@@ -169,28 +172,63 @@ body {
 .button {
   cursor: pointer;
   width: 80%;
-  background: #ecf0f1;
-  color: #462c50;
+  background-color: #f1f1f1;
+  padding: 8px;
+  color: #ef476f;
   border: none;
-  border-bottom: 4px solid #c4c6c7;
+  border-bottom: 4px solid #d6d6d6;
   border-radius: 8px;
   font-size: 60px;
   position: absolute;
   outline: none;
-  top: 40%;
-  left: 0;
-  right: 0;
-  bottom: 40%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   margin: auto;
+  transition-property: color, background-color, border-bottom, transform;
+  transition-duration: 150ms;
 }
 .button:hover {
-  color: #ecf0f1;
-  background: #462c50;
-  border-bottom: 4px solid #411f4e;
+  color: #f1f1f1;
+  background-color: #ef476f;
+  border-bottom: 4px solid #bf113a;
 }
 .button:active {
-  transform: scale(0.95);
-  transition-duration: 0.2s;
+  transform: translate(-50%, -50%) scale(0.95);
+}
+
+@media screen and (max-width: 540px) {
+  .game-header-offset {
+    display: none;
+  }
+
+  .game-header {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .game-title {
+    justify-content: flex-start;
+  }
+
+  .button {
+    font-size: 40px;
+  }
+
+  .yellow {
+    border-radius: 100% 5px 0 5px;
+  }
+
+  .blue {
+    border-radius: 5px 100% 5px 0;
+  }
+
+  .green {
+    border-radius: 0 5px 100% 5px;
+  }
+
+  .red {
+    border-radius: 5px 0 5px 100%;
+  }
 }
 
 /*# sourceMappingURL=styles.css.map */

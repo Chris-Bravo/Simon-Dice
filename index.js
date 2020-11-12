@@ -57,7 +57,7 @@ function startGame () {
 function nextLevel () {
 
   setState({ 
-    highScore: getState().currentLevel,
+    score: getState().currentLevel,
     currentLevel: getState().currentLevel + 1,
   });
 

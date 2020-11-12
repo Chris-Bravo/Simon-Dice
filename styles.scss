@@ -4,377 +4,154 @@ $green: #06d6a0;
 $red: #ef476f;
 
 * {
-    box-sizing: border-box;
-    padding: 0;
-    margin: 0;
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
 }
 
 body {
-    font-family: 'Bungee inline';
+  font-family: 'Bungee inline';
 }
 
 .container {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-    background-color: #2d2c50;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-color: #2d2c50;
 }
 
 .game-title {
-    color: #2fc29b;
-    font-size: 36px;
+  color: #2fc29b;
+  font-size: 36px;
 }
 
 .game-data {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
 }
 
 .game-level {
-    position: sticky;
-    right: 0;
-    bottom: 0;
-    color: #ffffff;
-    font-size: 32px;
+  position: sticky;
+  right: 0;
+  bottom: 0;
+  color: #ffffff;
+  font-size: 32px;
 }
 
 .container-gameboard {
-    margin: 0 auto;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-    width: 60%;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  width: 60%;
 }
 .gameboard {
+  width: 100%;
+  max-width: 70vh;
+  position: relative;
+
+  .content {
+    position: absolute;
+    top: 0;
     width: 100%;
-    max-width: 70vh;
-    position: relative;
+    height: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5px;
+  }
 
-    .content {
-        position: absolute;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 5px;
-    }
-
-    &:before {
-        content: '';
-        padding-bottom: 100%;
-        display: block;
-    }
+  &:before {
+    content: '';
+    padding-bottom: 100%;
+    display: block;
+  }
 }
 
 .color {
-    cursor: pointer;
-    display: flex;
-    transition: all 0.2s;
-    transform-origin: center;
+  cursor: pointer;
+  display: flex;
+  transition: all 0.2s;
+  transform-origin: center;
 }
 
-$button-colors: ("blue": $blue, "yellow": $yellow, "red": $red, "green": $green);
+$button-colors: (
+  'blue': $blue,
+  'yellow': $yellow,
+  'red': $red,
+  'green': $green,
+);
 
 @each $name, $color in $button-colors {
-    .#{$name} {
-        box-shadow: 0px 0px 10px 1px $color inset;
-            
-        &.light {
-            box-shadow: 0px 0px 100px 150px $color inset;
-            background-color: $color;
-        }
-        
-        &:hover {
-            box-shadow: 0px 0px 15px 1px $color inset;
-        }
+  .#{$name} {
+    box-shadow: 0px 0px 10px 1px $color inset;
+
+    &.light {
+      box-shadow: 0px 0px 100px 150px $color inset;
+      background-color: $color;
     }
+
+    &:hover {
+      box-shadow: 0px 0px 15px 1px $color inset;
+    }
+  }
+}
+
+.disable-button {
+  pointer-events: none;
 }
 
 .yellow {
-    border-radius: 100% 10px 0 10px;
+  border-radius: 100% 10px 0 10px;
 }
 
 .blue {
-    border-radius: 10px 100% 10px 0;
+  border-radius: 10px 100% 10px 0;
 }
 
 .green {
-    border-radius: 10px 0 10px 100%;
+  border-radius: 10px 0 10px 100%;
 }
 
 .red {
-    border-radius: 0 10px 100% 10px;
+  border-radius: 0 10px 100% 10px;
 }
 
 .hide {
-    display: none;
+  display: none;
 }
 
 .button {
-    cursor: pointer;
-    width: 80%;
-    background: #ecf0f1;
-    color: #462c50;
-    border: none;
-    border-bottom: 4px solid #c4c6c7;
-    border-radius: 8px;
-    font-size: 60px;
-    position: absolute;
-    outline: none;
-    top: 40%;
-    left: 0;
-    right: 0;
-    bottom: 40%;
-    margin: auto;
+  cursor: pointer;
+  width: 80%;
+  background: #ecf0f1;
+  color: #462c50;
+  border: none;
+  border-bottom: 4px solid #c4c6c7;
+  border-radius: 8px;
+  font-size: 60px;
+  position: absolute;
+  outline: none;
+  top: 40%;
+  left: 0;
+  right: 0;
+  bottom: 40%;
+  margin: auto;
 
-    &:hover {
-        color: #ecf0f1;
-        background: #462c50;
-        border-bottom: 4px solid #411f4e;
-    }
-    
-    &:active{
-        transform: scale(0.95);
-        transition-duration: 0.2s;
-    }
+  &:hover {
+    color: #ecf0f1;
+    background: #462c50;
+    border-bottom: 4px solid #411f4e;
+  }
+
+  &:active {
+    transform: scale(0.95);
+    transition-duration: 0.2s;
+  }
 }
-
-@media screen and (max-width: 720px){
-    .container-gameboard{
-        margin: 0 auto;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 80%;
-        height: calc(100vw * 80/100);
-    }
-
-    .gameboard{
-        width: 100%;
-        height: 100%;
-    }
-}
-
-
-// If(0 <= x <= 2, sqrt(4-(x-2)^(2)),
-//     If(2 < x <= 6, 2-sqrt(1-((x)/(2)-2)^(2)),
-//         If(6 < x <= 8, sqrt(4-(x-6)^(2)),
-//             If(8 < x <= 9, sqrt(0.5^(2)-(x-8.5)^(2)),
-//                 If(9 < x <= 14, 0,
-//                     If(14 < x <= 15, x - 14,
-//                         If(15 < x <= 18, (cos(20 x-300)+7)/(8),
-//                             If(18 < x <= 20.5, ((-1)/(8) (7+cos(60)))/(20.5-18) (x-18) + ((1)/(8)) (7+cos(60)),
-//                                 If(20.5 < x <= 24, -0.1(x-20.5)^(2),
-//                                     If(24 < x <= 25, -1.225)
-//                                 )
-//                             )
-//                         )
-//                     )
-//                 )
-//             )
-//         )
-//     )
-// )
-
-// 422
-
-// If(0 < x <= 2, 1.639727 + sqrt(4-(x-2)^(2)),
-//     If(2 < x <= 6, 1.639727 + 2-sqrt(1-((x)/(2)-2)^(2)),
-//         If(6 < x <= 8, 1.639727 + sqrt(4-(x-6)^(2)),
-//             If(8 < x <= 9, 1.639727 + sqrt(0.5^(2)-(x-8.5)^(2)),
-//                 If(9 < x <= 14, 1.639727,
-//                     If(14 < x <= 15, x - 14 + 1.639727,
-//                         If(15 < x <= 18, 1.639727 + (cos(20 x-300)+7)/(8),
-//                             If(18 < x <= 20.5, 1.639727 + ((-1)/(8) (7+cos(60)))/(20.5-18) (x-18) + ((1)/(8)) (7+cos(60)),
-//                                 If(20.5 < x <= 23, 1.639727 - 0.1(x-20.5)^(2),
-//                                     If(23 < x <= 25, 0.375 - 1 + 1.639727)
-//                                 )
-//                             )
-//                         )
-//                     )
-//                 )
-//             )
-//         )
-//     )
-// )
-
-// 422
-
-// If(0 < x <= 2, 1.8 + sqrt(4-(x-2)^(2)),
-//     If(2 < x <= 6, 1.8 + 2-sqrt(1-((x)/(2)-2)^(2)),
-//         If(6 < x <= 8, 1.8 + sqrt(4-(x-6)^(2)),
-//             If(8 < x <= 9, 1.8 + sqrt(0.5^(2)-(x-8.5)^(2)),
-//                 If(9 < x <= 14, 1.8,
-//                     If(14 < x <= 15, x - 14 + 1.8,
-//                         If(15 < x <= 18, 1.8 + (cos(20 x-300)+7)/(8),
-//                             If(18 < x <= 20.5, 1.8 + ((-1)/(8) (7+cos(60)))/(20.5-18) (x-18) + ((1)/(8)) (7+cos(60)),
-//                                 If(20.5 < x <= 23, 1.8 - 0.1(x-20.5)^(2),
-//                                     If(23 < x <= 25, 0.375 - 1 + 1.8)
-//                                 )
-//                             )
-//                         )
-//                     )
-//                 )
-//             )
-//         )
-//     )
-// )
-
-// 499
-
-// If(0 < x <= 2, 1.85 + sqrt(4-(x-2)^(2)),
-//     If(2 < x <= 6, 1.85 + 2-sqrt(1-((x)/(2)-2)^(2)),
-//         If(6 < x <= 8, 1.85 + sqrt(4-(x-6)^(2)),
-//             If(8 < x <= 9, 1.85 + sqrt(0.5^(2)-(x-8.5)^(2)),
-//                 If(9 < x <= 14, 1.85,
-//                     If(14 < x <= 15, x - 14 + 1.85,
-//                         If(15 < x <= 18, 1.85 + (cos(20 x-300)+7)/(8),
-//                             If(18 < x <= 20.5, 1.85 + ((-1)/(8) (7+cos(60)))/(20.5-18) (x-18) + ((1)/(8)) (7+cos(60)),
-//                                 If(20.5 < x <= 23, 1.85 - 0.1(x-20.5)^(2),
-//                                     If(23 < x <= 25, 0.375 - 1 + 1.85)
-//                                 )
-//                             )
-//                         )
-//                     )
-//                 )
-//             )
-//         )
-//     )
-// )
-
-// 480
-
-// rotate y = 1.8 + sqrt(4-(x-2)^(2)), 0<x<=2 about the x-axis
-// rotate y = 1.8 + 2-sqrt(1-((x)/(2)-2)^(2)), 2<x<=6 about the x-axis
-// rotate y = 1.8 + sqrt(4-(x-6)^(2)), 6<x<=8 about the x-axis
-// rotate y = 1.8 + sqrt(0.5^(2)-(x-8.5)^(2)), 8<x<=9 about the x-axis
-// rotate y = 1.8, 9<x<=14 about the x-axis
-// rotate y = x - 14 + 1.8, 14<x<=15 about the x-axis
-// rotate y = 1.8 + (cos(20 x-300)+7)/(8), 15<x<=18 about the x-axis
-// rotate y = 1.8 + ((-1)/(8) (7+cos(60)))/(20.5-18) (x-18) + ((1)/(8)) (7+cos(60)), 18<x<=20.5 about the x-axis
-// rotate y = 1.8 - 0.1(x-20.5)^(2), 20.5<x<=23 about the x-axis
-// rotate y = 0.375 - 1 + 1.8, 23<x<=25 about the x-axis
-
-// 480
-
-// y = 1.85 + sqrt(4-(x-2)^(2))
-// y = 1.85 + 2-sqrt(1-((x)/(2)-2)^(2))
-// y = 1.85 + sqrt(4-(x-6)^(2))
-// y = 1.85 + sqrt(0.5^(2)-(x-8.5)^(2))
-// y = 1.85
-// y = x - 14 + 1.85
-// y = 1.85 + (cos(20 x-300)+7)/(8)
-// y = 1.85 + ((-1)/(8) (7+cos(60)))/(20.5-18) (x-18) + ((1)/(8)) (7+cos(60))
-// y = 1.85 - 0.1(x-20.5)^(2)
-// y = 0.375 - 1 + 1.85
-
-
-
-
-// If(0 < x <= 2, 1.639911 + sqrt(4-(x-2)^(2)),
-//     If(2 < x <= 6, 1.639911 + 2-sqrt(1-((x)/(2)-2)^(2)),
-//         If(6 < x <= 8, 1.639911 + sqrt(4-(x-6)^(2)),
-//             If(8 < x <= 9, 1.639911 + sqrt(0.5^(2)-(x-8.5)^(2)),
-//                 If(9 < x <= 14, 1.639911,
-//                     If(14 < x <= 15, x - 14 + 1.639911,
-//                         If(15 < x <= 18, 1.639911 + (cos(20 x-300)+7)/(8),
-//                             If(18 < x <= 20.5, 1.639911 + ((-1)/(8) (7+cos(60)))/(20.5-18) (x-18) + ((1)/(8)) (7+cos(60)),
-//                                 If(20.5 < x <= 23, 1.639911 - 0.1(x-20.5)^(2),
-//                                     If(23 < x <= 25, 0.375 - 1 + 1.639911)
-//                                 )
-//                             )
-//                         )
-//                     )
-//                 )
-//             )
-//         )
-//     )
-// )
-
-// sqrt(4-(x-2)^(2)
-// 2-sqrt(1-((x)/(2)-2)^(2)
-// sqrt(4-(x-6)^(2)
-// sqrt(0.5^(2)-(x-8.5)^(2)
-// 0
-
-// 1 + sqrt(4-(x-2)^(2)) + a
-// 1 + 2-sqrt(1-((x)/(2)-2)^(2)) + a
-// 1 + sqrt(4-(x-6)^(2)) - a
-// 1 + sqrt(0.5^(2)-(x-8.5)^(2))
-// 1
-
-
-// x - 13
-// 1 + (cos(20 x-300)+7)/(8)
-// 1 + ((-1)/(8) (7+cos(60)))/(20.5-18) (x-18) + ((1)/(8)) (7+cos(60)),
-// 1 - 0.1(x-20.5)^(2),
-// 0.375
-
-
-// x - 14
-// cos(20 x-300)+7)/(8)
-// ((-1)/(8) (7+cos(60)))/(20.5-18) (x-18) + ((1)/(8)) (7+cos(60))
-// -0.1(x-20.5)^(2)
-// -1.225
-
-// Surface(u,f(u) cos(w),f(u) sin(w a),u,a,b,w,0,φ)
-
-
-
-
-// π((7)/(3)+a^(2)+3a) +
-// π((1353+3 sin(60°))/(128)+(sin(120°))/(5120)+3 a^(2)+(a sin(60°))/(80)+(45 a)/(4)) +
-// π(3a^(2)+15a+(4881)/(256)) +
-// π(7.85398a^(2)+12.4355a+5.19508) +
-// π((9)/(32)+(3a)/(2)+2a^(2))
-
-// π((7)/(3)+x^(2)+3x) + π(3x^(2)+15x+(4881)/(256)) + π(7.85398x^(2)+12.4355x+5.19508) + π((9)/(32)+(3x)/(2)+2x^(2)) + π ((sqrt(3))/(10240)+(1)/(128) (1353+(3 sqrt(3))/(2))+(45 x)/(4)+(sqrt(3) x)/(160)+3 x^(2)) = 500
-
-// En lugar de la trigonometrica: 
-// π((1353+3 sin(60°))/(128)+(sin(120°))/(5120)+3 x^(2)+(x sin(60°))/(80)+(45 x)/(4))
-// π ((sqrt(3))/(10240)+(1)/(128) (1353+(3 sqrt(3))/(2))+(45 x)/(4)+(sqrt(3) x)/(160)+3 x^(2))
-
-// 84.4337 + 100.328 x + 43.5236 x^2 + π ((sqrt(3))/(10240)+(1)/(128) (1353+(3 sqrt(3))/(2))+(45 x)/(4)+(sqrt(3) x)/(160)+3 x^(2)) + (119 π)/2 + 39 x π + 9 x^2 π - (7 π^2)/4 + (9 x π^2)/4 = 500
-
-
-// (22)/(3) π+2 π a^(2)+4 π a+2 π^(2)+2 π^(2) a +
-// (116)/(3) π-6 π^(2)+24 π a+4 π a^(2)-2 π^(2) a +
-// (22)/(3) π+2 π a^(2)+4 π a+2 π^(2)+2 π^(2) a +
-// (7)/(6) π+π a^(2)+2 π a+(1)/(4) π^(2)+(1)/(4) π^(2) a +
-// 5 π+5 π a
-
-// (22)/(3) π+2 π a^(2)+4 π a+2 π^(2)+2 π^(2) a + (116)/(3) π-6 π^(2)+24 π a+4 π a^(2)-2 π^(2) a + (22)/(3) π+2 π a^(2)+4 π a+2 π^(2)+2 π^(2) a + (7)/(6) π+π a^(2)+2 π a+(1)/(4) π^(2)+(1)/(4) π^(2) a + 5 π+5 π a
-// 46 π + 28 a π + 6 a^2 π - 4 π^2 + (17 π)/2 + 6 a π + 3 a^2 π + (9 π^2)/4 + (9 a π^2)/4 + 5 π+5 π a
-
-// (119 π)/2 + 39 x π + 9 x^2 π - (7 π^2)/4 + (9 x π^2)/4
-
-
-
-
-// π((7)/(3)+a^(2)+3a) +
-// π(3a^(2)+15a+(4881)/(256)) +
-// π(7.85398a^(2)+12.4355a+5.19508) +
-// π((9)/(32)+(3a)/(2)+2a^(2)) +
-// (22)/(3) π+2 π a^(2)+4 π a+2 π^(2)+2 π^(2) a +
-
-// 127.211 + 39.0673 a + 24.674 a^2 + (47 a π)/2 + 8 a^2 π + 2 a π^2
-
-// (116)/(3) π-6 π^(2)+24 π a+4 π a^(2)-2 π^(2) a +
-// (22)/(3) π+2 π a^(2)+4 π a+2 π^(2)+2 π^(2) a +
-// (7)/(6) π+π a^(2)+2 π a+(1)/(4) π^(2)+(1)/(4) π^(2) a +
-// 5 π+5 π a
-
-// (313 π)/6 + 35 a π + 7 a^2 π - (15 π^2)/4 + (a π^2)/4
-
-// π((1353+3 sin(60))/(128)+(sin(120))/(5120)+3 a^(2)+(a sin(60))/(80)+(45 a)/(4))
-// π((((1353+(3*0.304810621))/(128))+((0.580611184)/(5120))+3 a^(2)+(a * -0.304810621)/(80)+(45 a)/(4))
-
-// (10.5776 + 11.2462 a + 3 a^2) π

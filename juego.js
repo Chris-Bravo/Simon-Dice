@@ -22,16 +22,112 @@ const GAME_BUTTONS_BY_COLOR = {
   red: redButton,
 };
 
-function initListeners () {
+const [ getState, setState ] = useStore();
+
+function initGameListeners () {
   startButton.addEventListener('click', startGame);
 
   Object.values(GAME_BUTTONS_BY_COLOR).forEach(button => {
-    button.addEventListener('click', onColorButtonClick),
-    button.classList.add('disable-button');
+    button.addEventListener('click', onGameButtonClick);
   });
 }
 
-const [getState, setState] = useStore();
+function restartGameState () {
+  showStartButton();
+  disableGameButtons();
+}
+
+function startGame () {
+  const newSequence = generateNewSequence();
+
+  setState({
+    currentLevel: 1,
+    colorSequenceInGame: newSequence,
+  });
+
+  hideStartButton();
+  updateScoreboard();
+  setTimeout(nextSublevel, 1000);
+}
+
+function nextLevel () {
+
+  setState({ 
+    currentLevel: getState().currentLevel + 1,
+  });
+
+  swal('Muy bien', {
+    icon: 'success',
+    buttons: false,
+    timer: 800,
+  });
+
+  updateScoreboard();
+  setTimeout(nextSublevel, 1500);
+}
+
+function nextSublevel () {
+
+  setState({ 
+    sublevel: 0 
+  });
+
+  disableGameButtons();
+  iluminateSequence();
+}
+
+function iluminateSequence () {
+  const { currentLevel, colorSequenceInGame } = getState();
+
+  for (let i = 0; i < currentLevel; i++) {
+    const sequenceNumber = colorSequenceInGame[i];
+    const color = getColorByNumber(sequenceNumber);
+    const delay = 1000 * i;
+
+    setTimeout(turnOnButtonByColor, delay, color);
+
+    // Enable buttons after the last button turned on
+    if (i === currentLevel - 1) {
+      setTimeout(enableGameButtons , delay);
+    }
+  }
+}
+
+function onGameButtonClick ($event) {
+  const { color } = $event.target.dataset;
+  const { sublevel, colorSequenceInGame } = getState();
+  const currentButtonNumber = getNumberByColor(color);
+  const sublevelSequenceNumber = colorSequenceInGame[sublevel];
+
+  turnOnButtonByColor(color, 200);
+
+  if (currentButtonNumber === sublevelSequenceNumber) {
+    checkIfUserCompleteLevel();
+    return;
+  }
+
+  displayGameOverNotification();
+}
+
+function checkIfUserCompleteLevel () {
+
+  setState({ 
+    sublevel: getState().sublevel + 1,
+  });
+
+  const userCompleteLevel = getState().sublevel === getState().currentLevel;
+  const userCompleteLastLevel = getState().currentLevel === FINAL_LEVEL;
+
+  if (userCompleteLevel && userCompleteLastLevel) {
+    displayWinnerNotification();
+    return;
+  }
+
+  if (userCompleteLevel) {
+    nextLevel();
+    return;
+  }
+}
 
 function generateNewSequence () {
   const newSequence = new Array(FINAL_LEVEL)
@@ -45,14 +141,6 @@ function getButtonByColor (color) {
   return GAME_BUTTONS_BY_COLOR[color];
 }
 
-function hideStartButton () {
-  startButton.classList.add('hide');
-}
-
-function showStartButton () {
-  startButton.classList.remove('hide');
-}
-
 function getColorByNumber (number) {
   const color = Object.keys(COLORS).filter(color => COLORS[color] === number);
   return color[0];
@@ -60,26 +148,6 @@ function getColorByNumber (number) {
 
 function getNumberByColor (color) {
   return COLORS[color];
-}
-
-function updateDOM () {
-  gameLevel.innerText = getState().currentLevel;
-}
-
-function iluminateSequence () {
-  const { currentLevel, colorSequenceInGame } = getState();
-
-  for (let i = 0; i < currentLevel; i++) {
-    const color = getColorByNumber(colorSequenceInGame[i]);
-    const delay = 1000 * i;
-
-    setTimeout(turnOnButtonByColor, delay, color);
-
-    // Enable buttons after the last button turned on
-    if (i === currentLevel - 1) {
-      setTimeout(enableGameButtons , delay);
-    }
-  }
 }
 
 function turnOnButtonByColor (color, duration = 300) {
@@ -106,73 +174,26 @@ function disableGameButtons () {
   );
 }
 
-function onColorButtonClick ($event) {
-  const { color } = $event.target.dataset;
-  const { sublevel, colorSequenceInGame } = getState();
-  const colorNumber = getNumberByColor(color);
-
-  turnOnButtonByColor(color, 200);
-
-  if (colorNumber === colorSequenceInGame[sublevel]) {
-    setState({ sublevel: getState().sublevel + 1 });
-
-    if (getState().sublevel === getState().currentLevel) {
-      if (getState().currentLevel === FINAL_LEVEL) {
-        winner();
-      } else {
-        setState({ currentLevel: getState().currentLevel + 1 });
-        passNextLevel();
-      }
-    }
-  } else {
-    gameOver();
-  }
+function hideStartButton () {
+  startButton.classList.add('hide');
 }
 
-function passNextLevel () {
-  swal('Muy bien', {
-    icon: 'success',
-    buttons: false,
-    timer: 800,
-  });
-  updateDOM();
-  setTimeout(nextLevel, 1500);
+function showStartButton () {
+  startButton.classList.remove('hide');
 }
 
-function nextLevel () {
-  setState({ sublevel: 0 });
-  disableGameButtons();
-  iluminateSequence();
+function updateScoreboard () {
+  gameLevel.innerText = getState().currentLevel;
 }
 
-function winner () {
-  swal('Ganaste!', 'Felicitaciones, ganaste el juego!', 'success').then(
-    restartGameState,
-  );
+function displayWinnerNotification () {
+  swal('Ganaste!', 'Felicitaciones, ganaste el juego!', 'success')
+    .then(restartGameState);
 }
 
-function gameOver () {
-  swal('Perdiste!', 'Lo lamentamos, perdiste :(', 'error').then(
-    restartGameState,
-  );
+function displayGameOverNotification () {
+  swal('Perdiste!', 'Lo lamentamos, perdiste :(', 'error')
+    .then(restartGameState);
 }
 
-function restartGameState () {
-  showStartButton();
-  disableGameButtons();
-}
-
-function startGame () {
-  const newSequence = generateNewSequence();
-  setState({
-    currentLevel: 1,
-    sublevel: 0,
-    colorSequenceInGame: newSequence,
-  });
-
-  updateDOM();
-  hideStartButton();
-  setTimeout(nextLevel, 1000);
-}
-
-initListeners();
+initGameListeners();

@@ -6,13 +6,14 @@ const blueButton = document.getElementById('blueButton');
 const greenButton = document.getElementById('greenButton');
 const redButton = document.getElementById('redButton');
 const gameLevel = document.getElementById('gameLevel');
+const gameScore = document.getElementById('gameScore');
 
-const FINAL_LEVEL = 4;
+const LEVEL_GROWTH_RATE = 4;
 const COLORS = {
   yellow: 0,
   blue: 1,
-  green: 2,
-  red: 3,
+  red: 2,
+  green: 3,
 };
 
 const GAME_BUTTONS_BY_COLOR = {
@@ -22,6 +23,7 @@ const GAME_BUTTONS_BY_COLOR = {
   red: redButton,
 };
 
+// TODO: Think best way to implement reactive state
 const [ getState, setState ] = useStore();
 
 function initGameListeners () {
@@ -30,6 +32,8 @@ function initGameListeners () {
   Object.values(GAME_BUTTONS_BY_COLOR).forEach(button => {
     button.addEventListener('click', onGameButtonClick);
   });
+
+  updateScoreboard();
 }
 
 function restartGameState () {
@@ -53,10 +57,11 @@ function startGame () {
 function nextLevel () {
 
   setState({ 
+    highScore: getState().currentLevel,
     currentLevel: getState().currentLevel + 1,
   });
 
-  swal('Muy bien', {
+  swal('Amazing!', {
     icon: 'success',
     buttons: false,
     timer: 800,
@@ -116,11 +121,16 @@ function checkIfUserCompleteLevel () {
   });
 
   const userCompleteLevel = getState().sublevel === getState().currentLevel;
-  const userCompleteLastLevel = getState().currentLevel === FINAL_LEVEL;
+  const userCompleteLastLevel = getState().currentLevel === getState().colorSequenceInGame.length;
 
   if (userCompleteLevel && userCompleteLastLevel) {
-    displayWinnerNotification();
-    return;
+
+    const newSequence = generateNewSequence();
+
+    // TODO: Think best way to create Infinite mode for game
+    setState({
+      colorSequenceInGame: [...getState().colorSequenceInGame, ...newSequence]
+    })
   }
 
   if (userCompleteLevel) {
@@ -130,7 +140,7 @@ function checkIfUserCompleteLevel () {
 }
 
 function generateNewSequence () {
-  const newSequence = new Array(FINAL_LEVEL)
+  const newSequence = new Array(LEVEL_GROWTH_RATE)
     .fill(0)
     .map(_ => Math.floor(Math.random() * 4));
 
@@ -184,15 +194,17 @@ function showStartButton () {
 
 function updateScoreboard () {
   gameLevel.innerText = getState().currentLevel;
+  gameScore.innerText = getState().highScore;
 }
 
 function displayWinnerNotification () {
-  swal('Ganaste!', 'Felicitaciones, ganaste el juego!', 'success')
+  swal('You won!', 'Congratulations, you won the game!', 'success')
     .then(restartGameState);
 }
 
 function displayGameOverNotification () {
-  swal('Perdiste!', 'Lo lamentamos, perdiste :(', 'error')
+  //TODO: Create own swal alert
+  swal('You lost!', 'We are sorry, you lost :(', 'error')
     .then(restartGameState);
 }
 

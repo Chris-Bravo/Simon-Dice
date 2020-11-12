@@ -13,18 +13,45 @@ body {
   font-family: 'Bungee inline';
 }
 
-.container {
+.game {
   position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   height: 100vh;
   background-color: #2d2c50;
 }
 
+.game-header {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  padding: 8px;
+}
+
+.game-footer {
+  padding: 8px;
+}
+
+.game-score {
+  color: #ffffff;
+  font-size: 22px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  text-align: right;
+
+  span {
+    font-size: 34px;
+    color: $yellow;
+  }
+}
+
 .game-title {
+  display: flex;
   color: #2fc29b;
+  justify-content: center;
   font-size: 36px;
 }
 
@@ -37,14 +64,11 @@ body {
 }
 
 .game-level {
-  position: sticky;
-  right: 0;
-  bottom: 0;
   color: #ffffff;
   font-size: 32px;
 }
 
-.container-gameboard {
+.container-simon-board {
   margin: 0 auto;
   display: flex;
   justify-content: center;
@@ -52,7 +76,8 @@ body {
   position: relative;
   width: 60%;
 }
-.gameboard {
+
+.simon-board {
   width: 100%;
   max-width: 70vh;
   position: relative;
@@ -116,11 +141,11 @@ $button-colors: (
 }
 
 .green {
-  border-radius: 10px 0 10px 100%;
+  border-radius: 0 10px 100% 10px;
 }
 
 .red {
-  border-radius: 0 10px 100% 10px;
+  border-radius: 10px 0 10px 100%;
 }
 
 .hide {

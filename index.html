@@ -9,20 +9,31 @@
     <title>Juego Simon Dice</title>
 </head>
 <body>
-    <div class="container">
-        <h1 class="game-title">Simon dice</h1>
-        <div class="container-gameboard">
-            <div class="gameboard">
+    <div class="game">
+        <div class="game-header">
+            <span></span>
+            <h1 class="game-title">Simon</h1>
+            <div class="game-score">
+                <h5>High score</h5>
+                <span id="gameScore">0</span>
+            </div>
+        </div>
+        <div class="container-simon-board">
+            <div class="simon-board">
                 <div class="content">
-                    <div id="yellowButton" class="color yellow button-disable" data-color="yellow"></div>
-                    <div id="blueButton" class="color blue button-disable" data-color="blue"></div>
-                    <div id="greenButton" class="color green button-disable" data-color="green"></div>
-                    <div id="redButton" class="color red button-disable" data-color="red"></div>
-                    <button id="startButton" class="button">Iniciar</button>
+                    <div id="yellowButton" class="color yellow disable-button" data-color="yellow"></div>
+                    <div id="blueButton" class="color blue disable-button" data-color="blue"></div>
+                    <div id="redButton" class="color red disable-button" data-color="red"></div>
+                    <div id="greenButton" class="color green disable-button" data-color="green"></div>
+                    <button id="startButton" class="button">Start</button>
                 </div>
             </div>
         </div>
-        <span class="game-level" id="gameLevel">Level:</span>
+        <div class="game-footer">
+            <h6 class="game-level">Level:
+                <span id="gameLevel"></span>
+            </h6>
+        </div>
     </div>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script type="module" src="store.js"></script>

@@ -17,9 +17,10 @@ function createStore(initialState) {
 }
 
 const store = createStore({
-  currentLevel: 0,
+  currentLevel: 1,
   sublevel: 0,
   colorSequence: [],
+  highScore: 0
 });
 
 export default store;

@@ -10,7 +10,7 @@ function createStore(reducer, initialState) {
 
   const dispatch = (action) => {
     state = reducer(state, action);
-    notify();
+    notify(state);
   };
 
   const getState = () => {
@@ -42,7 +42,7 @@ const reducer = (state, action) => {
       };
 
       if (newState.score > newState.highScore) {
-        saveData('simon', { highScore: score });
+        saveData('simon', { highScore: newState.score });
         newState.highScore = newState.score;
       }
 
@@ -71,6 +71,14 @@ const reducer = (state, action) => {
   }
 };
 
+const getSavedScore = () => {
+  const data = getDataFor('simon');
+  if (data && data.highScore) {
+    return data.highScore;
+  }
+  return 0;
+};
+
 const store = createStore(reducer, {
   currentLevel: 1,
   sublevel: 0,
@@ -79,12 +87,5 @@ const store = createStore(reducer, {
   score: 0,
 });
 
-const getSavedScore = () => {
-  const data = getDataFor('simon');
-  if (data && data.highScore) {
-    return data.highScore;
-  }
-  return 0;
-};
 
 export default store;

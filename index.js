@@ -15,7 +15,6 @@ const COLORS = {
   red: 2,
   green: 3,
 };
-
 const GAME_BUTTONS_BY_COLOR = {
   yellow: yellowButton,
   blue: blueButton,
@@ -25,9 +24,9 @@ const GAME_BUTTONS_BY_COLOR = {
 
 const { subscribe, dispatch, getState } = useStore();
 
-subscribe(() => {
-  gameLevel.innerText = getState().currentLevel;
-  gameScore.innerText = getState().highScore;
+subscribe((state) => {
+  gameLevel.innerText = state.currentLevel;
+  gameScore.innerText = state.highScore;
 });
 
 const initGameListeners = () => {

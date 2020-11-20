@@ -1,34 +1,31 @@
 import { saveData, getDataFor } from './localstorage.js';
 
-function createStore (reducer, initialState) {
-
+function createStore(reducer, initialState) {
   let state = initialState;
   let notify = () => {};
 
-  function subscribe (callback) {
+  const subscribe = (callback) => {
     notify = callback;
-  }
+  };
 
-  function dispatch (action) {
+  const dispatch = (action) => {
     state = reducer(state, action);
     notify();
-  }
+  };
 
-  function getState () {
+  const getState = () => {
     return state;
-  }
+  };
 
   return () => ({
     subscribe,
     dispatch,
     getState,
-  })
-
+  });
 }
 
 // TODO: Refactoring reducer
-function reducer (state, action) {
-
+const reducer = (state, action) => {
   const { type, payload } = action;
 
   switch (type) {
@@ -36,14 +33,13 @@ function reducer (state, action) {
       return {
         ...state,
         ...payload,
-      }
+      };
     case 'NEXT_LEVEL':
-
       const newState = {
         ...state,
         score: state.currentLevel,
-        currentLevel: state.currentLevel + 1
-      }
+        currentLevel: state.currentLevel + 1,
+      };
 
       if (newState.score > newState.highScore) {
         saveData('simon', { highScore: score });
@@ -56,21 +52,24 @@ function reducer (state, action) {
       return {
         ...state,
         sublevel: 0,
-      }
+      };
     case 'INCREASE_SUBLEVEL':
       return {
         ...state,
-        sublevel: state.sublevel + 1
-      }
+        sublevel: state.sublevel + 1,
+      };
     case 'UPDATE_SEQUENCE':
       return {
         ...state,
-        colorSequenceInGame: [...state.colorSequenceInGame, ...payload.newSequence]
-      }
+        colorSequenceInGame: [
+          ...state.colorSequenceInGame,
+          ...payload.newSequence,
+        ],
+      };
     default:
       return state;
   }
-}
+};
 
 const store = createStore(reducer, {
   currentLevel: 1,
@@ -78,16 +77,14 @@ const store = createStore(reducer, {
   colorSequence: [],
   highScore: getSavedScore(),
   score: 0,
-})
+});
 
-function getSavedScore () {
+const getSavedScore = () => {
   const data = getDataFor('simon');
   if (data && data.highScore) {
     return data.highScore;
   }
   return 0;
-}
+};
 
 export default store;
-
-  

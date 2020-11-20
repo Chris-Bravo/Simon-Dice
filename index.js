@@ -23,8 +23,10 @@ const GAME_BUTTONS_BY_COLOR = {
   red: redButton,
 };
 
-// TODO: Think best way to implement reactive state
-const [ getState, setState ] = useStore();
+
+const { subscribe, dispatch, getState } = useStore();
+
+subscribe(updateScoreboard);
 
 function initGameListeners () {
   startButton.addEventListener('click', startGame);
@@ -33,7 +35,6 @@ function initGameListeners () {
     button.addEventListener('click', onGameButtonClick);
   });
 
-  updateScoreboard();
 }
 
 function restartGameState () {
@@ -44,22 +45,23 @@ function restartGameState () {
 function startGame () {
   const newSequence = generateNewSequence();
 
-  setState({
-    currentLevel: 1,
-    colorSequenceInGame: newSequence,
-  });
+  dispatch({
+    type: 'START_GAME', 
+    payload: { 
+      currentLevel: 1, 
+      colorSequenceInGame: newSequence 
+    }
+  })
 
   hideStartButton();
-  updateScoreboard();
   setTimeout(nextSublevel, 1000);
 }
 
 function nextLevel () {
 
-  setState({ 
-    score: getState().currentLevel,
-    currentLevel: getState().currentLevel + 1,
-  });
+  dispatch({
+    type: 'NEXT_LEVEL',
+  })
 
   swal('Amazing!', {
     icon: 'success',
@@ -67,15 +69,14 @@ function nextLevel () {
     timer: 800,
   });
 
-  updateScoreboard();
   setTimeout(nextSublevel, 1500);
 }
 
 function nextSublevel () {
 
-  setState({ 
-    sublevel: 0 
-  });
+  dispatch({
+    type: 'RESET_SUBLEVEL'
+  })
 
   disableGameButtons();
   iluminateSequence();
@@ -116,9 +117,9 @@ function onGameButtonClick ($event) {
 
 function checkIfUserCompleteLevel () {
 
-  setState({ 
-    sublevel: getState().sublevel + 1,
-  });
+  dispatch({
+    type: 'INCREASE_SUBLEVEL'
+  })
 
   const userCompleteLevel = getState().sublevel === getState().currentLevel;
   const userCompleteLastLevel = getState().currentLevel === getState().colorSequenceInGame.length;
@@ -128,8 +129,11 @@ function checkIfUserCompleteLevel () {
     const newSequence = generateNewSequence();
 
     // TODO: Think best way to create Infinite mode for game
-    setState({
-      colorSequenceInGame: [...getState().colorSequenceInGame, ...newSequence]
+    dispatch({
+      type: 'UPDATE_SEQUENCE',
+      payload: {
+        newSequence
+      }
     })
   }
 
